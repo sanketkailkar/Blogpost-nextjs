@@ -18,7 +18,20 @@ export default async function Posts() {
         };
         getUser();
     }, []);
+
     const { data: posts, error } = await supabase.from('blogposts').select('*')
+
+    const deletePost = async (id) => {
+        try {
+            const { data, error } = await supabase.from('blogposts').delete().eq('id', id);
+            if (data) {
+                console.log(data);
+            }
+            alert("Blog deleted successfully !!!");
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
 
@@ -43,7 +56,7 @@ export default async function Posts() {
                                     <div className="p-5">
                                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                                             {post.title}
-                        :                 </h5>
+                                        </h5>
                                         <p className="mb-3 font-sm text-gray-700 dark:text-gray-400 text-sm">
                                             {post.decp}
                                         </p>
@@ -54,6 +67,13 @@ export default async function Posts() {
                                         >
                                             Read more
                                         </Link> */}
+                                        <button
+                                            className="py-0.5 px-2 border rounded-xl text-white"
+                                            onClick={async () => {
+                                                const id = post.id;
+                                                await deletePost(id);
+                                            }}>
+                                            Delete</button>
                                     </div>
                                 </div>
                             </div>
